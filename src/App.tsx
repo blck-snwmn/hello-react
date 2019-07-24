@@ -3,6 +3,7 @@ import './App.css';
 
 const App: React.FC = () => {
   const [str, setStrState] = useState("a");
+  const [list, setListState] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="App">
@@ -15,9 +16,11 @@ const App: React.FC = () => {
         <input id="show" type="text" value={str} />
       </div>
       <button onClick={() => {
-        const s = inputRef.current && inputRef.current.value
-        setStrState(s || "")
+        const s = (inputRef.current && inputRef.current.value) || ""
+        setStrState(s)
+        setListState([...list, s])
       }}>set</button>
+      {list.map(v => <div>{v}</div>)}
     </div>
   );
 }
