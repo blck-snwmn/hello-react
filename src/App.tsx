@@ -1,6 +1,18 @@
 import React, { useState, useRef } from 'react';
 import './App.css';
 
+type PostProps = {
+  count:Number;
+  userName: string;
+  content: string;
+}
+const Post = (props: PostProps) => {
+  //時刻は投稿されるたびに更新されるが、一旦これでOKとする
+  return <ol>
+    <label><span>{props.count}</span>:{props.userName}:{new Date().toISOString()}</label>
+    <div>{props.content}</div>
+  </ol>
+}
 const App: React.FC = () => {
   const [str, setStrState] = useState("a");
   const [list, setListState] = useState<string[]>([]);
@@ -19,8 +31,10 @@ const App: React.FC = () => {
         const s = (inputRef.current && inputRef.current.value) || ""
         setStrState(s)
         setListState([...list, s])
-      }}>set</button>
-      {list.map(v => <div>{v}</div>)}
+      }}>post</button>
+      <ol>
+        {list.map((v,i) => <Post count={i} userName="no-name" content={v}></Post>)}
+      </ol>
     </div>
   );
 }
