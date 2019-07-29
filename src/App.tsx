@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useReducer } from 'react';
 import './App.css';
 
 type PostProps = {
@@ -13,6 +13,40 @@ const Post = (props: PostProps) => {
     <div>{props.content}</div>
   </ol>
 }
+
+type ReducerState = {
+  message: string
+}
+
+type ReducerAction = {
+  con: string
+}
+
+function reducer(state: ReducerState, action: ReducerAction): ReducerState {
+  switch (action.con) {
+    case "a":
+      return { message: state.message + "a" }
+    case "b":
+      return { message: state.message + "b" }
+    default:
+      return { message: "c" }
+  }
+}
+
+const Counter = () => {
+  const [state, dispatch] = useReducer(reducer, { message: "a" })
+  return (
+    <div>
+      Message:{state.message}
+      <div>
+        <button onClick={() => dispatch({ con: "a" })}>add a</button>
+        <button onClick={() => dispatch({ con: "b" })}>add b</button>
+        <button onClick={() => dispatch({ con: "c" })}>change c</button>
+      </div>
+    </div >
+  )
+}
+
 const App: React.FC = () => {
   const [str, setStrState] = useState("a");
   const [list, setListState] = useState<string[]>([]);
@@ -24,6 +58,7 @@ const App: React.FC = () => {
   }
   return (
     <div className="App">
+      <Counter />
       <div>
         <label htmlFor="input">入力</label>
         <input id="input" type="text" ref={inputRef} />
