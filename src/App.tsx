@@ -17,6 +17,11 @@ const App: React.FC = () => {
   const [str, setStrState] = useState("a");
   const [list, setListState] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  // const ws = useRef(new WebSocket("ws://localhost:18888/websocket"));
+  const ws = new WebSocket("ws://localhost:18888/websocket");
+  ws.onmessage = () => {
+    console.log("yes")
+  }
   return (
     <div className="App">
       <div>
@@ -31,9 +36,10 @@ const App: React.FC = () => {
         const s = (inputRef.current && inputRef.current.value) || ""
         setStrState(s)
         setListState([...list, s])
+        ws.send(s)
       }}>post</button>
       <ol>
-        {list.map((v,i) => <Post count={i} userName="no-name" content={v}></Post>)}
+        {list.map((v, i) => <Post count={i} userName="no-name" content={v}></Post>)}
       </ol>
     </div>
   );
