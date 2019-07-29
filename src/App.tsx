@@ -8,7 +8,7 @@ type PostProps = {
 }
 const Post = (props: PostProps) => {
   //時刻は投稿されるたびに更新されるが、一旦これでOKとする
-  return <ol>
+  return <ol key={props.count}>
     <label><span>{props.count}</span>:{props.userName}:{new Date().toISOString()}</label>
     <div>{props.content}</div>
   </ol>
