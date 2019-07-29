@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import './App.css';
 
 type PostProps = {
-  count:Number;
+  count: number;
   userName: string;
   content: string;
 }
