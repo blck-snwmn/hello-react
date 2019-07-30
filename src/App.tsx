@@ -47,15 +47,31 @@ const Counter = () => {
   )
 }
 
+const WebSocketWrap = () => {
+  const ws = new WebSocket("ws://localhost:18888/websocket/send");
+  // MessageEvent extends Event
+  ws.onmessage = (event: MessageEvent) => {
+    console.log("yes", event)
+  }
+  ws.onerror = (event: Event) => {
+    console.log("error", event)
+  }
+  ws.onopen = (event: Event) => {
+    console.log("open", event)
+  }
+  // CloseEvent extends Event
+  ws.onclose = (event: CloseEvent) => {
+    console.log("close", event)
+  }
+  return ws;
+}
+
 const App: React.FC = () => {
   const [str, setStrState] = useState("a");
   const [list, setListState] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   // const ws = useRef(new WebSocket("ws://localhost:18888/websocket"));
-  const ws = new WebSocket("ws://localhost:18888/websocket");
-  ws.onmessage = () => {
-    console.log("yes")
-  }
+  const ws = WebSocketWrap()
   return (
     <div className="App">
       <Counter />
@@ -69,7 +85,7 @@ const App: React.FC = () => {
       </div>
       <button onClick={() => {
         const s = (inputRef.current && inputRef.current.value) || ""
-        setStrState(s)
+        // setStrState(s)
         setListState([...list, s])
         ws.send(s)
       }}>post</button>
