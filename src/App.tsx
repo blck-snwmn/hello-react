@@ -1,4 +1,5 @@
 import React, { useState, useRef, useReducer } from 'react';
+import SideMenu, {MenuReducer} from './components/SideMenu';
 import './App.css';
 
 type PostProps = {
@@ -72,26 +73,35 @@ const App: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   // const ws = useRef(new WebSocket("ws://localhost:18888/websocket"));
   const ws = WebSocketWrap()
+
+  const [menuState, dispatch] = useReducer(MenuReducer, { content: Counter })
+
   return (
     <div className="App">
-      <Counter />
-      <div>
-        <label htmlFor="input">入力</label>
-        <input id="input" type="text" ref={inputRef} />
+      <SideMenu dispatch={dispatch}/>
+      <div className="Contents">
+        <menuState.content />
       </div>
-      <div>
-        <label htmlFor="show">表示</label>
-        <input id="show" type="text" value={str} />
+      <div className="Contents">
+        <Counter />
+        <div>
+          <label htmlFor="input">入力</label>
+          <input id="input" type="text" ref={inputRef} />
+        </div>
+        <div>
+          <label htmlFor="show">表示</label>
+          <input id="show" type="text" value={str} />
+        </div>
+        <button onClick={() => {
+          const s = (inputRef.current && inputRef.current.value) || ""
+          // setStrState(s)
+          setListState([...list, s])
+          ws.send(s)
+        }}>post</button>
+        <ol>
+          {list.map((v, i) => <Post count={i} userName="no-name" content={v}></Post>)}
+        </ol>
       </div>
-      <button onClick={() => {
-        const s = (inputRef.current && inputRef.current.value) || ""
-        // setStrState(s)
-        setListState([...list, s])
-        ws.send(s)
-      }}>post</button>
-      <ol>
-        {list.map((v, i) => <Post count={i} userName="no-name" content={v}></Post>)}
-      </ol>
     </div>
   );
 }
