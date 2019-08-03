@@ -1,6 +1,7 @@
 import React, { useReducer, Dispatch } from 'react';
 import Counter from './contents/Counter';
 import Posts from './contents/Posts';
+import Chat from './contents/Chat';
 
 
 type MenuState = {
@@ -15,6 +16,8 @@ export function menuReducer(state: MenuState, action: MenuAction): MenuState {
             return { content: Counter }
         case "posts":
             return { content: Posts }
+        case "chat":
+            return { content: Chat }
         default:
             return { content: () => { return <div>hello3</div> } }
     }
@@ -33,6 +36,9 @@ const SideMenu = (props: { dispatch: React.Dispatch<MenuAction> }) => {
             </li>
             <li>
                 <button onClick={() => props.dispatch({ menu: "posts" })}>posts</button>
+            </li>
+            <li>
+                <button onClick={() => props.dispatch({ menu: "chat" })}>chat</button>
             </li>
             <li>
                 <button onClick={() => props.dispatch({ menu: "a" })}>sample1</button>
