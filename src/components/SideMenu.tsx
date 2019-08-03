@@ -1,4 +1,6 @@
 import React, { useReducer, Dispatch } from 'react';
+import Counter from './contents/Counter';
+import Posts from './contents/Posts';
 
 
 type MenuState = {
@@ -9,24 +11,34 @@ type MenuAction = {
 }
 export function MenuReducer(state: MenuState, action: MenuAction): MenuState {
     switch (action.menu) {
-        case "count":
-            return { content: () => { return <div>hello1</div> } }
-        case "count2":
-            return { content: () => { return <div>hello2</div> } }
+        case "counter":
+            return { content: Counter }
+        case "posts":
+            return { content: Posts }
         default:
             return { content: () => { return <div>hello3</div> } }
     }
 }
 
-const SideMenu = (props: {dispatch: React.Dispatch<MenuAction>}) => {
+export function initContent(): MenuState {
+    return { content: () => { return <div>init hello</div> } }
+}
+
+const SideMenu = (props: { dispatch: React.Dispatch<MenuAction> }) => {
     return <nav className="SideMenu">
-    <h1>side menu</h1>
-    <ul>
-      <li><button onClick={() => props.dispatch({ menu: "count" })}>sample1</button></li>
-      <li><button  onClick={() => props.dispatch({ menu: "count2" })}>sample1</button></li>
-      <li><button  onClick={() => props.dispatch({ menu: "a" })}>sample1</button></li>
-    </ul>
-  </nav>
+        <h1>side menu</h1>
+        <ul>
+            <li>
+                <button onClick={() => props.dispatch({ menu: "counter" })}>counter</button>
+            </li>
+            <li>
+                <button onClick={() => props.dispatch({ menu: "posts" })}>posts</button>
+            </li>
+            <li>
+                <button onClick={() => props.dispatch({ menu: "a" })}>sample1</button>
+            </li>
+        </ul>
+    </nav>
 }
 
 export default SideMenu;
