@@ -1,8 +1,8 @@
 import React, { useReducer } from 'react';
-import SideMenu, { MenuReducer, initContent } from './components/SideMenu';
+import SideMenu, { menuReducer, initContent } from './components/SideMenu';
 import './App.css';
 
-const WebSocketWrap = () => {
+const webSocketWrap = () => {
   const ws = new WebSocket("ws://localhost:18888/websocket/send");
   // MessageEvent extends Event
   ws.onmessage = (event: MessageEvent) => {
@@ -23,9 +23,9 @@ const WebSocketWrap = () => {
 
 const App: React.FC = () => {
   // const ws = useRef(new WebSocket("ws://localhost:18888/websocket"));
-  const ws = WebSocketWrap()
+  const ws = webSocketWrap()
 
-  const [menuState, dispatch] = useReducer(MenuReducer, {}, initContent)
+  const [menuState, dispatch] = useReducer(menuReducer, {}, initContent)
 
   return (
     <div className="App">

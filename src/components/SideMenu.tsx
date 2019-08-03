@@ -9,7 +9,7 @@ type MenuState = {
 type MenuAction = {
     menu: string
 }
-export function MenuReducer(state: MenuState, action: MenuAction): MenuState {
+export function menuReducer(state: MenuState, action: MenuAction): MenuState {
     switch (action.menu) {
         case "counter":
             return { content: Counter }
