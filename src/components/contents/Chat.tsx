@@ -40,7 +40,7 @@ function useWebSocketEvent(url: string): [Event, WebSocket] {
             setEventState(event)
         }
         return () => { ws.close() }
-    }, [url])
+    }, [ws])
     return [eventState, ws]
 }
 
