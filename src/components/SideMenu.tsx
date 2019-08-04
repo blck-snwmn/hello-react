@@ -1,4 +1,4 @@
-import React, { useReducer, Dispatch } from 'react';
+import React from 'react';
 import Counter from './contents/Counter';
 import Posts from './contents/Posts';
 import Chat from './contents/Chat';
