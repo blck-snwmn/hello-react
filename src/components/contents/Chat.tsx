@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef } from 'react';
 import { useWebSocketEvent } from '../../hooks/Custom'
 
 function show(event: Event): string {
@@ -25,6 +25,27 @@ function show(event: Event): string {
     return message
 }
 
+const UrlChanger = (props: {
+    eventState: Event,
+    setUrlState: (v: React.SetStateAction<string>) => void
+}) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    return (
+        <div>
+            <div>
+                <input id="input" type="text" ref={inputRef} />
+                <button onClick={() => {
+                    if (inputRef.current) {
+                        props.setUrlState(inputRef.current.value)
+                    }
+                }}>connect</button>
+            </div>
+            <div>
+                Event: {show(props.eventState)}
+            </div>
+        </div>
+    )
+}
 const Chat = () => {
     console.log("chat")
 
@@ -33,22 +54,10 @@ const Chat = () => {
     const url = urlBase + urlState
 
     const [eventState, ws] = useWebSocketEvent(url)
-
-    const inputRef = useRef<HTMLInputElement>(null);
     return (
         <div>
-            <div>
-                <input id="input" type="text" ref={inputRef} />
-                <button onClick={() => {
-                    if (inputRef.current) {
-                        setUrlState(inputRef.current.value)
-                    }
-                }}>connect</button>
-            </div>
-            <div>
-                Event: {show(eventState)}
-            </div>
-        </div>
+            <UrlChanger eventState={eventState} setUrlState={setUrlState} />
+        </div >
     )
 }
 
