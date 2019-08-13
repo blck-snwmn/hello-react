@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useWebSocketEvent } from '../../hooks/Custom'
 
 function show(event: Event): string {
@@ -24,7 +24,46 @@ function show(event: Event): string {
     console.log("show", message)
     return message
 }
-
+const ShowMessgae = (props: {
+    eventState: Event
+}) => {
+    const [eventsState, setEventsState] = useState<Event[]>([])
+    useEffect(() => {
+        setEventsState(old => [...old, props.eventState])
+    }, [props.eventState])
+    return (
+        <ol>
+            {
+                eventsState.map(e => {
+                    return (
+                        < li key={e.timeStamp} >
+                            {show(e)}
+                        </li>
+                    )
+                })
+            }
+        </ol>
+    )
+}
+const SendMessage = (props: {
+    webSocket: WebSocket
+}) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    return (
+        <div>
+            <input ref={inputRef} />
+            <button onClick={() => {
+                if (inputRef.current) {
+                    // 非同期で投げるほうがよいかも
+                    // 要検証
+                    props.webSocket.send(inputRef.current.value)
+                }
+            }} >
+                send
+            </button>
+        </div>
+    )
+}
 const UrlChanger = (props: {
     eventState: Event,
     setUrlState: (v: React.SetStateAction<string>) => void
@@ -33,7 +72,7 @@ const UrlChanger = (props: {
     return (
         <div>
             <div>
-                <input id="input" type="text" ref={inputRef} />
+                <input id="input" type="text" ref={inputRef} defaultValue="noname" />
                 <button onClick={() => {
                     if (inputRef.current) {
                         props.setUrlState(inputRef.current.value)
@@ -41,22 +80,26 @@ const UrlChanger = (props: {
                 }}>connect</button>
             </div>
             <div>
-                Event: {show(props.eventState)}
+                Room Name: {inputRef.current ? inputRef.current.value : "noname"}
             </div>
         </div>
     )
 }
+
 const Chat = () => {
     console.log("chat")
 
-    const urlBase = "ws://localhost:18888/websocket/"
-    const [urlState, setUrlState] = useState("send")
+    const urlBase = "ws://localhost:28888/ws/"
+    const [urlState, setUrlState] = useState("noname")
     const url = urlBase + urlState
 
     const [eventState, ws] = useWebSocketEvent(url)
+
     return (
         <div>
             <UrlChanger eventState={eventState} setUrlState={setUrlState} />
+            <SendMessage webSocket={ws} />
+            <ShowMessgae eventState={eventState} />
         </div >
     )
 }
