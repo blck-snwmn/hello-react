@@ -28,7 +28,7 @@ const Posts = () => {
                 <input id="show" type="text" value={str} />
             </div>
             <button onClick={() => {
-                const s = (inputRef.current && inputRef.current.value) || ""
+                const s = inputRef.current?.value ?? ""
                 setStrState(s)
                 setListState([...list, s])
             }}>post</button>

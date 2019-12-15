@@ -80,7 +80,7 @@ const UrlChanger = (props: {
                 }}>connect</button>
             </div>
             <div>
-                Room Name: {inputRef.current ? inputRef.current.value : "noname"}
+                Room Name: {inputRef.current?.value ?? "noname"}
             </div>
         </div>
     )
